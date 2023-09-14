@@ -229,11 +229,11 @@ test36FibonacciOneIsOne
 
 	self assert: one fibonacci equals: one! !
 
-!NumeroTest methodsFor: 'tests' stamp: 'NR 9/23/2018 23:49:39'!
+!NumeroTest methodsFor: 'tests' stamp: 'AG 9/14/2023 10:09:37'!
 test37FibonacciEnteroReturnsAddingPreviousTwoFibonacciEnteros
 
 	self assert: four fibonacci equals: five.
-	self assert: three fibonacci equals: three. 
+	self assert: three fibonacci equals: three.
 	self assert: five fibonacci equals: four fibonacci + three fibonacci.! !
 
 !NumeroTest methodsFor: 'tests' stamp: 'NR 9/23/2018 23:49:47'!
@@ -255,12 +255,12 @@ test40NegationOfFraccionIsCorrect
 
 	self assert: oneHalf negated equals: negativeOne / two.! !
 
-!NumeroTest methodsFor: 'tests' stamp: 'NR 9/23/2018 23:50:11'!
+!NumeroTest methodsFor: 'tests' stamp: 'AG 9/14/2023 10:08:13'!
 test41SignIsCorrectlyAssignedToFractionWithTwoNegatives
 
 	self assert: oneHalf equals: (negativeOne / negativeTwo)! !
 
-!NumeroTest methodsFor: 'tests' stamp: 'NR 9/23/2018 23:50:17'!
+!NumeroTest methodsFor: 'tests' stamp: 'AG 9/14/2023 10:08:35'!
 test42SignIsCorrectlyAssignedToFractionWithNegativeDivisor
 
 	self assert: oneHalf negated equals: (one / negativeTwo)! !
@@ -496,15 +496,6 @@ Numero subclass: #Entero
 	
 	^self class with: value // aDivisor integerValue! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'AG 9/14/2023 02:24:14'!
-divideToEntero: aEntero
-	^Fraccion with: aEntero over: self integerValue .! !
-
-!Entero methodsFor: 'arithmetic operations' stamp: 'zm 9/13/2023 22:22:30'!
-divideToFraccion: aFraccion
-	^Fraccion with:(self value * aFraccion denominator) over: aFraccion numerator.
-! !
-
 !Entero methodsFor: 'arithmetic operations' stamp: 'AG 9/14/2023 03:43:25'!
 dividirUnEntero: unEntero
 	^Fraccion with: unEntero over: self! !
@@ -516,19 +507,19 @@ dividirUnaFraccion: unaFraccion
 	newDenominator := Entero with: (self integerValue  * unaFraccion denominator integerValue) .
 	^Fraccion with: newNumerator over: newDenominator! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'AG 9/14/2023 03:09:09'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'AG 9/14/2023 09:58:39'!
 fibonacci
 
-	"| one two |
+	| one two |
 	
 	one := Entero with: 1.
 	two := Entero with: 2.
 	
-	self isNegative ifTrue: [self error: Entero negativeFibonacciErrorDescription ].	
-	self isNegative ifFalse: [(self isZero or: [self isOne]) ifTrue: [^one].].
+	"self isNegative ifTrue: [self error: Entero negativeFibonacciErrorDescription ].	"
 	
 	(self isZero or: [self isOne]) ifTrue: [^one].
-	(self isZero or: [self isOne]) ifFalse: [^(self - one) fibonacci + (self - two) fibonacci]."
+	
+	^(self - one) fibonacci + (self - two) fibonacci
 	
 		! !
 
@@ -575,7 +566,7 @@ sumarUnaFraccion: aFraccion
 ! !
 
 
-!Entero methodsFor: 'comparing' stamp: 'HernanWilkinson 5/7/2016 21:01'!
+!Entero methodsFor: 'comparing' stamp: 'AG 9/14/2023 04:15:08'!
 = anObject
 
 	^(anObject isKindOf: self class) and: [ value = anObject integerValue ]! !
@@ -586,14 +577,14 @@ hash
 	^value hash! !
 
 
-!Entero methodsFor: 'initialization' stamp: 'AG 9/14/2023 03:48:14'!
+!Entero methodsFor: 'initialization' stamp: 'AG 9/14/2023 10:01:58'!
 initializeWith: aValue
-	| instance |
-	(aValue < 0) ifTrue: [instance := EnteroNegativo with: aValue].
-	(aValue = 0 or: aValue = 1) ifTrue: [instance := EnteroZeroUno with: aValue].
+	(aValue < 0) ifTrue: [^EnteroNegativo with: aValue].
+	value := aValue
+	"(aValue = 0 or: aValue = 1) ifTrue: [instance := EnteroZeroUno with: aValue].
 	(aValue > 1) ifTrue: [instance := EnteroPositivo with: aValue].
 	^instance.
-	"value := aValue"
+	value := aValue"
 	! !
 
 
@@ -660,80 +651,6 @@ fibonacci
 initializeWith: aValue
 	value := aValue! !
 
-!EnteroNegativo methodsFor: 'initialization' stamp: 'AG 9/14/2023 02:10:25'!
-isNegative
-	^true! !
-
-!EnteroNegativo methodsFor: 'initialization' stamp: 'AG 9/14/2023 02:11:43'!
-isOne
-	
-	^false! !
-
-!EnteroNegativo methodsFor: 'initialization' stamp: 'AG 9/14/2023 02:12:49'!
-isZero
-	
-	^false! !
-
-
-!classDefinition: #EnteroPositivo category: 'Numero-Exercise'!
-Entero subclass: #EnteroPositivo
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Numero-Exercise'!
-
-!EnteroPositivo methodsFor: 'initialization' stamp: 'AG 9/14/2023 03:07:07'!
-fibonacci
-	^(Entero with: self value - 1) fibonacci + (Entero with: self value - 2) fibonacci! !
-
-!EnteroPositivo methodsFor: 'initialization' stamp: 'AG 9/14/2023 01:56:16'!
-initializeWith: aValue
-	value := aValue! !
-
-!EnteroPositivo methodsFor: 'initialization' stamp: 'AG 9/14/2023 02:10:55'!
-isNegative
-	^false! !
-
-!EnteroPositivo methodsFor: 'initialization' stamp: 'AG 9/14/2023 02:12:09'!
-isOne
-	
-	^false! !
-
-!EnteroPositivo methodsFor: 'initialization' stamp: 'AG 9/14/2023 02:12:39'!
-isZero
-	
-	^false! !
-
-
-!classDefinition: #EnteroZeroUno category: 'Numero-Exercise'!
-Entero subclass: #EnteroZeroUno
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Numero-Exercise'!
-
-!EnteroZeroUno methodsFor: 'initialization' stamp: 'AG 9/14/2023 03:03:39'!
-fibonacci
-	^Entero with: 1.! !
-
-!EnteroZeroUno methodsFor: 'initialization' stamp: 'AG 9/14/2023 02:53:54'!
-initializeWith: aValue
-	value := aValue! !
-
-!EnteroZeroUno methodsFor: 'initialization' stamp: 'AG 9/14/2023 02:11:09'!
-isNegative
-	^false! !
-
-!EnteroZeroUno methodsFor: 'initialization' stamp: 'AG 9/14/2023 02:11:59'!
-isOne
-	
-	^value = 1! !
-
-!EnteroZeroUno methodsFor: 'initialization' stamp: 'AG 9/14/2023 02:12:27'!
-isZero
-	
-	^value = 0! !
-
 
 !classDefinition: #Fraccion category: 'Numero-Exercise'!
 Numero subclass: #Fraccion
@@ -761,19 +678,11 @@ Numero subclass: #Fraccion
 	(aDivisor  isKindOf: self class) ifTrue:[^(numerator * aDivisor denominator) / (denominator * aDivisor numerator)]."
 ! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'zm 9/13/2023 22:23:51'!
-divideToEntero: anEntero
-	^Fraccion with: numerator over:(denominator * anEntero value).! !
-
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'zm 9/13/2023 22:24:12'!
-divideToFraccion: aFraccion
-	^Fraccion with:(numerator * aFraccion denominator) over: (denominator * aFraccion numerator).! !
-
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'AG 9/14/2023 03:44:08'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'AG 9/14/2023 04:07:01'!
 dividirUnEntero: unEntero
 	|newDenominator newNumerator|
-	newNumerator :=  self denominator * unEntero  .
-	newDenominator:= self numerator .
+	newNumerator :=  self denominator * unEntero.
+	newDenominator:= self numerator.
 	^Fraccion with: newNumerator over: newDenominator.! !
 
 !Fraccion methodsFor: 'arithmetic operations' stamp: 'AG 9/14/2023 03:44:21'!
