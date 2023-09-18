@@ -223,24 +223,8 @@ test05CanNotCheckPrefixWhenThereAreNoObjectsInTheStack
 
 		! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'AG 9/18/2023 13:00:39'!
-test06CanNotFindSentendesWhenPrefixIsEmpty
-
-	| stack  sentencesFinder|
-	
-	stack := OOStack new.
-	stack push: 'sentence'.
-	sentencesFinder := SentenceFinderByPrefix new.
-	self
-		should: [ sentencesFinder find: '' in: stack ]
-		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [ :anError |
-			self assert: anError messageText = Prefijo prefixEmptyErrorDescription ]
-
-		! !
-
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'zm 9/18/2023 17:16:16'!
-test07StackRemainsTheSame
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'zm 9/18/2023 18:34:15'!
+test06StackRemainsTheSame
 
 	| stack prefijo sentenceFinder element elementCopy stackCopy |
 	
@@ -511,60 +495,82 @@ with: ultimo
 	! !
 
 
-!classDefinition: #Prefijo category: 'Stack-Exercise'!
-Object subclass: #Prefijo
-	instanceVariableNames: 'prefijo'
+!classDefinition: #Sentence category: 'Stack-Exercise'!
+Object subclass: #Sentence
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
-
-!Prefijo methodsFor: 'as yet unclassified' stamp: 'AG 9/18/2023 12:08:14'!
-initializeWith: unPrefijo
-	(unPrefijo isEmpty or: [unPrefijo includesSubString: ' ']) ifTrue: [^EmptyPrefijo new].
-	^ValidPrefijo new initializeWith: unPrefijo! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Prefijo class' category: 'Stack-Exercise'!
-Prefijo class
+!classDefinition: 'Sentence class' category: 'Stack-Exercise'!
+Sentence class
 	instanceVariableNames: ''!
 
-!Prefijo class methodsFor: 'as yet unclassified' stamp: 'AG 9/18/2023 12:35:49'!
-prefixEmptyErrorDescription
-	^'Prefijo es vacio o contiene vacio'! !
+!Sentence class methodsFor: 'as yet unclassified' stamp: 'zm 9/18/2023 18:30:01'!
+initializeWith: aSentence and: aPrefijo
+	((aSentence findString: aPrefijo startingAt:  0 caseSensitive: true) > 0)ifTrue: [^ValidSentence initializeWith: aSentence .].
+	^InvalidSentence new.! !
 
 
-!classDefinition: #EmptyPrefijo category: 'Stack-Exercise'!
-Prefijo subclass: #EmptyPrefijo
+!classDefinition: #InvalidSentence category: 'Stack-Exercise'!
+Sentence subclass: #InvalidSentence
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!EmptyPrefijo methodsFor: 'evaluating' stamp: 'AG 9/18/2023 12:58:58'!
-esPrefijoDe: aSentence con: unaLista
-	^self error: Prefijo prefixEmptyErrorDescription! !
+!InvalidSentence methodsFor: 'initialization' stamp: 'zm 9/18/2023 18:20:20'!
+addtoValidList: list
+! !
 
+!InvalidSentence methodsFor: 'initialization' stamp: 'zm 9/18/2023 17:54:31'!
+inializeWith: aSentence! !
 
-!EmptyPrefijo methodsFor: 'initialization' stamp: 'AG 9/18/2023 11:45:55'!
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'InvalidSentence class' category: 'Stack-Exercise'!
+InvalidSentence class
+	instanceVariableNames: ''!
+
+!InvalidSentence class methodsFor: 'as yet unclassified' stamp: 'zm 9/18/2023 18:24:53'!
+initializeWith: aSentence
+	^self new initializeWith: aSentence ! !
+
+!InvalidSentence class methodsFor: 'as yet unclassified' stamp: 'zm 9/18/2023 18:26:13'!
+initializeWith: aSentence and: aList
+	^self new initializeWith: aSentence and: aList.! !
+
+
+!classDefinition: #ValidSentence category: 'Stack-Exercise'!
+Sentence subclass: #ValidSentence
+	instanceVariableNames: 'validList value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!ValidSentence methodsFor: 'initialization' stamp: 'zm 9/18/2023 18:31:30'!
+addtoValidList: list
+	list add: value.! !
+
+!ValidSentence methodsFor: 'initialization' stamp: 'zm 9/18/2023 17:58:46'!
 initialize
-	prefijo := ''! !
+	validList := OrderedCollection new.! !
 
-
-!classDefinition: #ValidPrefijo category: 'Stack-Exercise'!
-Prefijo subclass: #ValidPrefijo
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Stack-Exercise'!
+!ValidSentence methodsFor: 'initialization' stamp: 'zm 9/18/2023 18:31:22'!
+initializeWith: aSentence
+	value := aSentence.! !
 
-!ValidPrefijo methodsFor: 'as yet unclassified' stamp: 'AG 9/18/2023 12:51:44'!
-esPrefijoDe: aSentence con: unaLista
-	((aSentence findString: prefijo startingAt:  0 caseSensitive: true) > 0) ifTrue: [unaLista add: aSentence].! !
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!ValidPrefijo methodsFor: 'as yet unclassified' stamp: 'AG 9/18/2023 11:52:27'!
-initializeWith: aPrefijo
-	prefijo := aPrefijo! !
+!classDefinition: 'ValidSentence class' category: 'Stack-Exercise'!
+ValidSentence class
+	instanceVariableNames: ''!
+
+!ValidSentence class methodsFor: 'as yet unclassified' stamp: 'zm 9/18/2023 18:24:25'!
+initializeWith: aSentence
+	^self new initializeWith: aSentence ! !
 
 
 !classDefinition: #SentenceFinderByPrefix category: 'Stack-Exercise'!
@@ -574,25 +580,28 @@ Object subclass: #SentenceFinderByPrefix
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!SentenceFinderByPrefix methodsFor: 'finder' stamp: 'zm 9/18/2023 16:40:25'!
+!SentenceFinderByPrefix methodsFor: 'finder' stamp: 'zm 9/18/2023 18:27:44'!
 find: aPrefix in: aStack
-	| prefix |
-	prefix := Prefijo new initializeWith: aPrefix.
+	
 	backupStack := OOStack new.
 	listaValida := OrderedCollection new.
 
 	[aStack isEmpty not] whileTrue: [
-		self findPrefix: prefix from: aStack
+		self findPrefix: aPrefix from: aStack
 		].
 	self recomponerStack: aStack .
-	^listaValida.! !
+	^listaValida .! !
 
-!SentenceFinderByPrefix methodsFor: 'finder' stamp: 'zm 9/18/2023 16:31:35'!
+!SentenceFinderByPrefix methodsFor: 'finder' stamp: 'zm 9/18/2023 18:27:28'!
 findPrefix: aPrefix from: aStack 
-	| sentence |
-	sentence := aStack pop.
-	backupStack push: sentence.
-	aPrefix esPrefijoDe: sentence con: listaValida.! !
+	| sentence  element|
+	element := aStack pop.
+	sentence := Sentence initializeWith: element and: aPrefix.
+	sentence addtoValidList: listaValida. 
+
+	backupStack push: element.
+	
+! !
 
 !SentenceFinderByPrefix methodsFor: 'finder' stamp: 'zm 9/18/2023 17:01:17'!
 recomponerStack: aStack
