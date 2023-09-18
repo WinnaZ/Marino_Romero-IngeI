@@ -144,8 +144,8 @@ TestCase subclass: #SentenceFinderByPrefixTest
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'AG 9/18/2023 00:02:51'!
-test01FirstTest
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'zm 9/18/2023 17:17:09'!
+test01SentenceFinderFindsResultCorrectly
 
 	| stack prefijo result sentenceFinder |
 	
@@ -239,25 +239,34 @@ test06CanNotFindSentendesWhenPrefixIsEmpty
 
 		! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'zm 9/18/2023 16:38:23'!
-test07StenceFinderFindsSentenceCorrectlyAndStackRemainsTheSame
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'zm 9/18/2023 17:16:16'!
+test07StackRemainsTheSame
 
-	| stack prefijo result sentenceFinder element elementCopy stackCopy |
+	| stack prefijo sentenceFinder element elementCopy stackCopy |
 	
 	stack := OOStack new.
-	sentenceFinder := SentenceFinderByPrefix new.
 
-	stack push: 'wier is coming'	.
-	stack push: 'Winter is here'.
+	stack push: 'wnter1'	.
+	stack push: 'wnter2'.
+	stack push: 'wnter3'.
+	stack push: 'wnter4'.
+	
+	stackCopy := OOStack new.
+
+	stackCopy push: 'wnter1'	.
+	stackCopy push: 'wnter2'.
+	stackCopy push: 'wnter3'.
+	stackCopy push: 'wnter4'.
+	
+	sentenceFinder := SentenceFinderByPrefix new.
 	prefijo := 'Win'.
 	
-	stackCopy := stack.
-	result := sentenceFinder find: prefijo in: stack.
 	
-	self assert: result includes: 'Winter is here'.
+	sentenceFinder find: prefijo in: stack.
+	
 	[stack isEmpty not] whileTrue: [
+		elementCopy := stackCopy pop.
 	    	element := stack pop.
-	    	elementCopy := stackCopy pop.
     		self assert: element = elementCopy
    	].! !
 
@@ -585,13 +594,14 @@ findPrefix: aPrefix from: aStack
 	backupStack push: sentence.
 	aPrefix esPrefijoDe: sentence con: listaValida.! !
 
-!SentenceFinderByPrefix methodsFor: 'finder' stamp: 'zm 9/18/2023 16:34:34'!
+!SentenceFinderByPrefix methodsFor: 'finder' stamp: 'zm 9/18/2023 17:01:17'!
 recomponerStack: aStack
 	|sentence|
 	[backupStack isEmpty not] whileTrue: [
 		sentence:= backupStack pop.
 		aStack push: sentence.
-		].! !
+		].
+! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
